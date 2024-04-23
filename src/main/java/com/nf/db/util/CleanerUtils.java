@@ -37,9 +37,9 @@ public final class CleanerUtils {
     }
 
     /**
-     * 关闭数据库的Sql语句编译对象
+     * 关闭数据库的数据库语句预编译对象
      * 出现异常抛出数据库访问异常
-     * @param statm Sql语句编译对象
+     * @param statm 数据库语句预编译对象
      * @throws SQLException 数据库访问异常
      */
     public static void close(PreparedStatement statm) throws SQLException {
@@ -74,9 +74,9 @@ public final class CleanerUtils {
     }
 
     /**
-     * 安静关闭数据库的Sql语句编译对象
+     * 安静关闭数据库的数据库语句预编译对象
      * 出现异常捕获后无操作
-     * @param statm Sql语句编译对象
+     * @param statm 数据库语句预编译对象
      */
     public static void closeQuietly(PreparedStatement statm){
         try {
@@ -100,9 +100,9 @@ public final class CleanerUtils {
     }
 
     /**
-     * 安静关闭数据库的：数据库语句编译对象、数据库连接对象
+     * 安静关闭数据库的：数据库语句预编译对象、数据库连接对象
      * 通常用于：增、删、改操作当中
-     * @param statm 数据库语句编译对象
+     * @param statm 数据库语句预编译对象
      * @param con 数据库连接对象
      */
     public static void closeQuietly(PreparedStatement statm,Connection con){
@@ -114,10 +114,10 @@ public final class CleanerUtils {
     }
 
     /**
-     * 安静关闭数据库的：结果集对象、数据库语句编译对象、数据库连接对象
+     * 安静关闭数据库的：结果集对象、数据库语句预编译对象、数据库连接对象
      * 通常用于查询操作当中
      * @param rs 结果集对象
-     * @param statm 数据库语句编译对象
+     * @param statm 数据库语句预编译对象
      * @param con 数据库连接对象
      */
     public static void closeQuietly(ResultSet rs,PreparedStatement statm,Connection con){
