@@ -1,13 +1,14 @@
 package com.nf.db.handler.list;
 
-import com.nf.db.ResultSetHandler;
+import com.nf.db.handler.abstractset.AbstractListHandler;
+import com.nf.db.handler.abstractset.AbstractResultSetHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColumnListHandler <T> implements ResultSetHandler<List<T>> {
+public class ColumnListHandler<T> extends AbstractListHandler<T> {
     private final int COLUMNINDEX;
     private final String COLUMNNAME;
 
@@ -29,14 +30,7 @@ public class ColumnListHandler <T> implements ResultSetHandler<List<T>> {
     }
 
     @Override
-    public List<T> handler(ResultSet rs) throws SQLException {
-        List<T> result = new ArrayList<>();
-
-        while (rs.next()){
-            T ts = (T) (COLUMNNAME==null?rs.getObject(COLUMNINDEX):rs.getObject(COLUMNNAME));
-            result.add(ts);
-        }
-
-        return result;
+    public T rowHandler(ResultSet rs) throws SQLException {
+        return DEFAULT_ROWPROCESSOR.toScalar(rs,COLUMNNAME,COLUMNINDEX);
     }
 }

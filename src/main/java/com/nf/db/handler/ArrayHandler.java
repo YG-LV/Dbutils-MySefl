@@ -1,6 +1,7 @@
 package com.nf.db.handler;
 
-import com.nf.db.ResultSetHandler;
+import com.nf.db.RowProcessor;
+import com.nf.db.handler.abstractset.AbstractResultSetHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,8 +9,7 @@ import java.sql.SQLException;
 /**
  * ArrayHandler类用于获取数据库一行数据
  */
-public class ArrayHandler implements ResultSetHandler<Object[]> {
-
+public class ArrayHandler extends AbstractResultSetHandler<Object[]> {
     /**
      * 静态的常量的无产数的数组
      * 当查询得不到结果时返回一个无参数组
@@ -33,17 +33,8 @@ public class ArrayHandler implements ResultSetHandler<Object[]> {
         //是否从数据库读取到一行结果,未读取到则返回空的数组常量
         if (!rs.next()) return EMPTY_ARRAY;
 
-        //获取结果集的源数据内的列数
-        int columnCount = rs.getMetaData().getColumnCount();
-
-        //创建储存结果的数组，长度为获取的列数
-        Object[] result = new Object[columnCount];
-
-        //循环遍历
-        //读取结果集内的参数并储存到数组中
-        for (int i = 0; i < columnCount; i++) {
-            result[i] = rs.getObject(i+1);
-        }
+        //获取查询结
+        Object[] result = DEFAULT_ROWPROCESSOR.toArray(rs);
 
         //返回查询结果
         return result;

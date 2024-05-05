@@ -1,6 +1,6 @@
 package com.nf.db.handler;
 
-import com.nf.db.ResultSetHandler;
+import com.nf.db.handler.abstractset.AbstractResultSetHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,17 +9,17 @@ import java.sql.SQLException;
  * ScalarHandler类用于获取数据库一行一列的数据
  * @param <T> 泛型(返回类型)
  */
-public class ScalarHandler <T> implements ResultSetHandler <T>{
+public class ScalarHandler<T> extends AbstractResultSetHandler<T> {
 
     /**
      * 列索引
      */
-    private final int COLUMNINDEX;
+    private int columnIndex;
 
     /**
      * 列名
      */
-    private final String COLUMNNAME;
+    private String columnName;
 
     /**
      * 构造函数(无参)
@@ -32,32 +32,31 @@ public class ScalarHandler <T> implements ResultSetHandler <T>{
     /**
      * 构造函数
      * 给列索引(常量)赋值
-     * @param COLUMNINDEX 列索引(常量)
+     * @param columnIndex 列索引(常量)
      */
-    public ScalarHandler(int COLUMNINDEX) {
-        this(COLUMNINDEX,null);
+    public ScalarHandler(int columnIndex) {
+        this(columnIndex,null);
     }
 
     /**
      * 构造函数
      * 给列名(常量)赋值
-     * @param COLUMNNAME 列名(常量)
+     * @param columnName 列名(常量)
      */
-    public ScalarHandler(String COLUMNNAME) {
-        this(1, COLUMNNAME);
+    public ScalarHandler(String columnName) {
+        this(1, columnName);
     }
 
     /**
      * 私有构造函数
      * 给当前类的常量赋值
-     * @param COLUMNINDEX 列索引(常量)
-     * @param COLUMNNAME 列名(常量)
+     * @param columnIndex 列索引(常量)
+     * @param columnName 列名(常量)
      */
-    private ScalarHandler(int COLUMNINDEX, String COLUMNNAME) {
-        this.COLUMNINDEX = COLUMNINDEX;
-        this.COLUMNNAME = COLUMNNAME;
+    private ScalarHandler(int columnIndex, String columnName) {
+        this.columnIndex = columnIndex;
+        this.columnName = columnName;
     }
-
 
     /**
      * ScalarHandler的方法读取数据库一行一列数据
@@ -70,18 +69,34 @@ public class ScalarHandler <T> implements ResultSetHandler <T>{
      */
     @Override
     public T handler(ResultSet rs) throws SQLException {
-        //是否从数据库中读取到一行结果，未读取到否则返回空值
-        if(!rs.next()) return null;
+        if (!rs.next()) return null;
 
-        //判断列名是否为空
-        //列名不为空则：返回使用列索引读取的一行一列数据
-        if (this.COLUMNNAME ==null){
-            return (T) rs.getObject(COLUMNINDEX);
-        }
-
-        //以上都不成立则：返回使用列名读取的一行一列数据（默认）
-        return (T) rs.getObject(COLUMNNAME);
+        return DEFAULT_ROWPROCESSOR.toScalar(rs, columnName, columnIndex);
     }
+
+//    /**
+//     * ScalarHandler的方法读取数据库一行一列数据
+//     * 根据用户给予的列索引或列名读取结果（默认为第1列）
+//     * 数据库查询结果读取后强制转换为泛型结果并返回
+//     * 异常则抛出数据库访问异常
+//     * @param rs 结果集对象
+//     * @return 读取数据库查询结果
+//     * @throws SQLException 数据库访问异常
+//     */
+//    @Override
+//    public T handler(ResultSet rs) throws SQLException {
+//        //是否从数据库中读取到一行结果，未读取到否则返回空值
+//        if(!rs.next()) return null;
+//
+//        //判断列名是否为空
+//        //列名不为空则：返回使用列索引读取的一行一列数据
+//        if (this.COLUMNNAME ==null){
+//            return (T) rs.getObject(COLUMNINDEX);
+//        }
+//
+//        //以上都不成立则：返回使用列名读取的一行一列数据（默认）
+//        return (T) rs.getObject(COLUMNNAME);
+//    }
 
 
 //    //重写：结果与上一致
