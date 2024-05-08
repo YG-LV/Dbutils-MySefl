@@ -2,6 +2,7 @@ package com.nf.db;
 
 import com.nf.db.handler.MapHandler;
 import com.nf.db.handler.list.ArrayListHandler;
+import com.nf.db.handler.list.MapListHandler;
 import com.nf.db.util.CleanerUtils;
 
 import javax.sql.DataSource;
@@ -80,13 +81,13 @@ public class SqlExecutor {
     /**
      * 数据库查询方法
      * 执行语句后返回结果集，根据泛型处理并返回该类型的结果
-     * 默认返回数组集合
+     * 默认返回集合Map类型
      * @param sql 数据库SQL可执行语句
      * @param params 参数
      * @return 泛型结果
      */
-    public List<Object[]> query(String sql, Object... params){
-        ArrayListHandler handler = new ArrayListHandler();
+    public List<Map<String, Object>> query(String sql, Object... params){
+        MapListHandler handler = new MapListHandler();
         return query(this.getConnection(),sql,handler,params);
     }
 
@@ -228,13 +229,13 @@ public class SqlExecutor {
      * 异常则抛出数据库访问异常
      *
      * @param stmt   数据库语句预编译对象
-     * @param patams 需要安全代入的参数
+     * @param params 需要安全代入的参数
      * @throws SQLException 数据库访问异常
      */
-    private void fillStatement(PreparedStatement stmt, Object... patams) throws SQLException {
-        for (int i = 0; i < patams.length; i++) {
+    private void fillStatement(PreparedStatement stmt, Object... params) throws SQLException {
+        for (int i = 0; i < params.length; i++) {
             //设置参数时，总是从1开始的，所以参数位置需要加1
-            stmt.setObject(i+1,patams[i]);
+            stmt.setObject(i+1,params[i]);
         }
     }
 }
