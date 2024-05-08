@@ -45,7 +45,7 @@ public class SqlExecutor {
      */
     public int update(String sql,Object... params){
         Connection connection = getConnection();
-        return uprdate(connection,sql,params);
+        return update(connection,sql,params);
     }
 
     /**
@@ -56,7 +56,7 @@ public class SqlExecutor {
      * @param params 参数
      * @return 执行影响行数
      */
-    public int uprdate(Connection connection,String sql,Object... params){
+    public int update(Connection connection,String sql,Object... params){
 
         int rows = 0;//返回参数：执行影响行数默认为0
 
