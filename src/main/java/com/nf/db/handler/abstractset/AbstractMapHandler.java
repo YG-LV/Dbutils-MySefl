@@ -14,13 +14,17 @@ public abstract class AbstractMapHandler<K,V> extends AbstractResultSetHandler<M
     }
     @Override
     public Map<K,V> handler(ResultSet rs) throws SQLException {
-        Map<K,V> result = new HashMap<>();
+        Map<K,V> result = createMap();
         while (rs.next()){
             K key = this.createKey(rs);
             V value = this.createValue(rs);
             result.put(key,value);
         }
         return result;
+    }
+
+    protected Map<K,V> createMap(){
+        return new HashMap<>();
     }
 
     protected K createKey(ResultSet rs) throws SQLException{
